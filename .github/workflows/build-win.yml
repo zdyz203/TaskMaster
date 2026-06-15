@@ -6,6 +6,10 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write       # 操作tag、release、发布资产必备
+  pull-requests: read
+
 jobs:
   build-win-x64:
     runs-on: windows-latest
