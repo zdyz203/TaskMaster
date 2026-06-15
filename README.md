@@ -47,6 +47,36 @@ python main.py
 
 参考 `hooks.example.macos.json`，合并到 `~/.claude/settings.json`。`.dmg` 安装后 `notify.py` 位于 `/Applications/TaskMaster.app/Contents/Resources/notify.py`，模板里已经填好这个路径。
 
+## Windows 安装（.exe）
+
+### 用户安装
+
+1. 下载 `TaskMaster-1.0.0-Setup.exe` 双击运行。安装包默认走当前用户目录，不需要管理员权限；如果勾选「为所有用户安装」会请求 UAC 提权。
+2. 安装向导可选项：
+   - **桌面快捷方式**（默认不勾）
+   - **开机自动启动**（默认不勾，原理是把快捷方式放到 `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`，无需注册表权限）
+3. 启动后没有主窗口，托盘图标和右上角浮窗即正常状态；首次监听本地 7878 端口时 Windows Defender 防火墙可能弹提示，允许「专用网络」即可。
+4. 配置 hooks：把 `hooks.example.json` 合并到 `~/.claude/settings.json`，把 `PATH_TO` 替换成安装目录里 `notify.py` 的绝对路径（默认 `%LOCALAPPDATA%\Programs\TaskMaster\notify.py`，全局安装则是 `C:\Program Files\TaskMaster\notify.py`）。
+5. 卸载：「设置 → 应用 → TaskMaster → 卸载」或「控制面板 → 程序」。
+
+### 开发者从源码打包
+
+需要 Python 3.10+ 和 [Inno Setup 6](https://jrsoftware.org/isdl.php)（`ISCC.exe` 在 `C:\Program Files (x86)\Inno Setup 6\`）：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File build_win.ps1
+# 产物: dist\TaskMaster-1.0.0-Setup.exe
+```
+
+脚本会：创建 `.venv-build` 隔离环境 → `pip install -r requirements.txt` + PyInstaller → 按 `TaskMaster.win.spec` 打 `dist/TaskMaster/` → ISCC 编译 `installer.iss` 生成单文件 Setup.exe。
+
+### 通过 GitHub Actions 云端打包
+
+仓库带 `.github/workflows/build-win.yml`，windows-latest runner 自带 Inno Setup：
+
+- Actions 页面手动触发，或
+- 推 tag：`git tag v1.0.0 && git push --tags`，产物自动挂到 Release。
+
 ## macOS 安装（.dmg）
 
 ### 用户安装
@@ -114,5 +144,9 @@ python notify.py --event SessionEnd   --session demo
 - `hooks.example.macos.json` — macOS hooks 配置模板
 - `requirements.txt` — 依赖
 - `TaskMaster.spec` — PyInstaller 打包配置（macOS）
+- `TaskMaster.win.spec` — PyInstaller 打包配置（Windows）
 - `build_mac.sh` — macOS 一键打 `.dmg` 脚本
-- `.github/workflows/build-mac.yml` — GitHub Actions 云端打包工作流
+- `build_win.ps1` — Windows 一键打 `Setup.exe` 脚本
+- `installer.iss` — Inno Setup 安装包脚本（Windows）
+- `.github/workflows/build-mac.yml` — GitHub Actions macOS 云端打包
+- `.github/workflows/build-win.yml` — GitHub Actions Windows 云端打包
