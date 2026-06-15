@@ -30,7 +30,9 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 ; .NET / VC 运行时不需要,PyInstaller 已捆绑
 
 [Languages]
-Name: "chinesesimp"; MessagesFile: "compiler:Languages\ChineseSimplified.isl"
+; Inno Setup 默认只附带英文 (Default.isl) 与官方 22 种语言;
+; ChineseSimplified.isl 是非官方翻译,在 GitHub Actions 的 windows-latest runner
+; 上不存在。这里只用英文向导,目标程序本身仍是中文。
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
