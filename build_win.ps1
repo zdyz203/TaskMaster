@@ -30,12 +30,21 @@ Write-Host '==> 安装依赖'
 if (Test-Path 'build') { Remove-Item -Recurse -Force 'build' }
 if (Test-Path 'dist')  { Remove-Item -Recurse -Force 'dist' }
 
-# 4) PyInstaller
-Write-Host '==> PyInstaller 打包'
+# 4) PyInstaller —— 主程序 + notify.exe
+Write-Host '==> PyInstaller 打包主程序'
 $pyinstaller = Join-Path $PSScriptRoot '.venv-build\Scripts\pyinstaller.exe'
 & $pyinstaller TaskMaster.win.spec --noconfirm --clean
 if (-not (Test-Path 'dist\TaskMaster\TaskMaster.exe')) {
     Write-Error '错误: 没有生成 dist\TaskMaster\TaskMaster.exe'
+}
+
+# notify.py 只用标准库 -> --onefile 单文件,放进主程序目录,Inno Setup 一起收。
+# --console 让 Claude Code hook 能拿到退出码;hook 是 subprocess 调用,不会弹黑窗。
+Write-Host '==> PyInstaller 打包 notify.exe'
+& $pyinstaller --onefile --console --name notify --distpath dist\TaskMaster `
+    --workpath build\notify --specpath build\notify --noconfirm --clean notify.py
+if (-not (Test-Path 'dist\TaskMaster\notify.exe')) {
+    Write-Error '错误: 没有生成 dist\TaskMaster\notify.exe'
 }
 
 # 5) Inno Setup 编译 —— 找 ISCC.exe;装了 Inno Setup 6 默认就在这儿

@@ -9,7 +9,6 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('notify.py', '.'),
         ('hooks.example.json', '.'),
         ('README.md', '.'),
     ],

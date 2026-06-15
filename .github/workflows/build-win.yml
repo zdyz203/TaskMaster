@@ -26,7 +26,9 @@ jobs:
           pip install pyinstaller
 
       - name: PyInstaller build
-        run: pyinstaller TaskMaster.win.spec --noconfirm --clean
+        run: |
+          pyinstaller TaskMaster.win.spec --noconfirm --clean
+          pyinstaller --onefile --console --name notify --distpath dist/TaskMaster --workpath build/notify --specpath build/notify --noconfirm --clean notify.py
 
       # windows-latest 自带 Inno Setup 6 (ISCC.exe 在 C:\Program Files (x86)\Inno Setup 6\)
       # 防止哪天 runner 镜像下掉,这里用 chocolatey 兜底

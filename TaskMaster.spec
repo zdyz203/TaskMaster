@@ -11,8 +11,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ('notify.py', '.'),
-        ('hooks.example.json', '.'),
+        ('hooks.example.macos.json', '.'),
         ('README.md', '.'),
     ],
     hiddenimports=[],

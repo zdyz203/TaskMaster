@@ -43,6 +43,21 @@ if [[ ! -d "$APP_PATH" ]]; then
   exit 1
 fi
 
+# 4b) 把 notify.py 也打成独立二进制 —— 让 Claude Code hook 不依赖系统 python3。
+# 用 --onefile 单文件 + --console (终端模式),放进 .app/Contents/MacOS/notify,
+# 与主程序同目录,后面的 codesign --deep 会一起签名。
+echo "==> PyInstaller 打包 notify (独立 hook 二进制)"
+pyinstaller --onefile --console --name notify \
+  --distpath dist/notify-bin --workpath build/notify --specpath build/notify \
+  --target-arch arm64 --noconfirm --clean notify.py
+NOTIFY_BIN="dist/notify-bin/notify"
+if [[ ! -f "$NOTIFY_BIN" ]]; then
+  echo "错误: 没有生成 $NOTIFY_BIN" >&2
+  exit 1
+fi
+cp "$NOTIFY_BIN" "$APP_PATH/Contents/MacOS/notify"
+chmod +x "$APP_PATH/Contents/MacOS/notify"
+
 # 5) ad-hoc 签名 — 没有开发者证书时也能在本机直接打开
 echo "==> ad-hoc 签名 .app"
 codesign --force --deep --sign - "$APP_PATH"

@@ -1,29 +1,29 @@
 {
-  "//": "把这段合并到 ~/.claude/settings.json 的 hooks 里。把 PATH_TO 替换为本项目 notify.py 的绝对路径，例如 D:\\\\work\\\\project\\\\ai\\\\agent\\\\notify.py。所有 hook 都调用同一个 notify.py，事件名从 stdin 的 hook_event_name 读取。",
+  "//": "Windows 用户:把这段合并到 ~/.claude/settings.json 的 hooks 里。把 PATH_TO 替换为 notify.exe 所在目录,默认安装路径是 %LOCALAPPDATA%\\\\Programs\\\\TaskMaster (例如 C:\\\\Users\\\\YOU\\\\AppData\\\\Local\\\\Programs\\\\TaskMaster\\\\notify.exe);全局安装则是 C:\\\\Program Files\\\\TaskMaster\\\\notify.exe。所有 hook 都调用同一个 notify.exe,事件名从 stdin 的 hook_event_name 自动读取。",
   "hooks": {
     "SessionStart": [
-      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "SessionEnd": [
-      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "UserPromptSubmit": [
-      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "PreToolUse": [
-      { "matcher": ".*", "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "PostToolUse": [
-      { "matcher": ".*", "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "Notification": [
-      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "Stop": [
-      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ],
     "SubagentStop": [
-      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+      { "hooks": [{ "type": "command", "command": "PATH_TO\\notify.exe" }] }
     ]
   }
 }

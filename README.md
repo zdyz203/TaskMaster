@@ -39,13 +39,23 @@ python main.py
 
 ## 接入 Claude Code Hooks
 
+安装包已经把 `notify.py` 打成了独立可执行文件,Claude Code hook 直接调用它,**最终用户机器无需安装 Python**。
+
 ### Windows
 
-把 `hooks.example.json` 的内容合并到 `~/.claude/settings.json`，把 `PATH_TO` 替换成 `notify.py` 的绝对路径。所有 hook 都调用同一个 `notify.py`，事件名和 `session_id` 从 stdin 的 hook payload 自动读取，浮窗主程序按 session 路由。
+把 `hooks.example.json` 的内容合并到 `~/.claude/settings.json`,把 `PATH_TO` 替换成安装目录:
+- 当前用户安装(默认):`%LOCALAPPDATA%\Programs\TaskMaster`
+- 全局安装:`C:\Program Files\TaskMaster`
+
+所有 hook 都调用同一个 `notify.exe`,事件名和 `session_id` 从 stdin 的 hook payload 自动读取,浮窗主程序按 session 路由。
 
 ### macOS
 
-参考 `hooks.example.macos.json`，合并到 `~/.claude/settings.json`。`.dmg` 安装后 `notify.py` 位于 `/Applications/TaskMaster.app/Contents/Resources/notify.py`，模板里已经填好这个路径。
+参考 `hooks.example.macos.json`,合并到 `~/.claude/settings.json`。`.dmg` 安装后 `notify` 位于 `/Applications/TaskMaster.app/Contents/MacOS/notify`,模板里已经填好这个路径。
+
+### 从源码运行(开发者)
+
+源码运行时 hook 命令仍走系统 Python:`python /path/to/notify.py`(Windows)或 `python3 /path/to/notify.py`(macOS),保留兼容。
 
 ## Windows 安装（.exe）
 
@@ -56,7 +66,7 @@ python main.py
    - **桌面快捷方式**（默认不勾）
    - **开机自动启动**（默认不勾，原理是把快捷方式放到 `%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup`，无需注册表权限）
 3. 启动后没有主窗口，托盘图标和右上角浮窗即正常状态；首次监听本地 7878 端口时 Windows Defender 防火墙可能弹提示，允许「专用网络」即可。
-4. 配置 hooks：把 `hooks.example.json` 合并到 `~/.claude/settings.json`，把 `PATH_TO` 替换成安装目录里 `notify.py` 的绝对路径（默认 `%LOCALAPPDATA%\Programs\TaskMaster\notify.py`，全局安装则是 `C:\Program Files\TaskMaster\notify.py`）。
+4. 配置 hooks：把 `hooks.example.json` 合并到 `~/.claude/settings.json`，把 `PATH_TO` 替换成安装目录（默认 `%LOCALAPPDATA%\Programs\TaskMaster`，全局安装则是 `C:\Program Files\TaskMaster`）。安装包已捆绑 `notify.exe`，无需系统装 Python。
 5. 卸载：「设置 → 应用 → TaskMaster → 卸载」或「控制面板 → 程序」。
 
 ### 开发者从源码打包
@@ -68,7 +78,7 @@ powershell -ExecutionPolicy Bypass -File build_win.ps1
 # 产物: dist\TaskMaster-1.0.0-Setup.exe
 ```
 
-脚本会：创建 `.venv-build` 隔离环境 → `pip install -r requirements.txt` + PyInstaller → 按 `TaskMaster.win.spec` 打 `dist/TaskMaster/` → ISCC 编译 `installer.iss` 生成单文件 Setup.exe。
+脚本会:创建 `.venv-build` 隔离环境 → `pip install -r requirements.txt` + PyInstaller → 按 `TaskMaster.win.spec` 打主程序 + 单独打一份 `notify.exe` 到 `dist/TaskMaster/` → ISCC 编译 `installer.iss` 生成单文件 Setup.exe。
 
 ### 通过 GitHub Actions 云端打包
 
@@ -103,7 +113,7 @@ brew install create-dmg   # 可选；未安装会自动 fallback 到 hdiutil
 # 产物: dist/TaskMaster-1.0.0-arm64.dmg
 ```
 
-脚本会：创建 `.venv-build` 隔离环境 → `pip install -r requirements.txt` + PyInstaller → 按 `TaskMaster.spec` 打 `.app` → ad-hoc 签名 → `create-dmg` 制作拖拽式 DMG。
+脚本会:创建 `.venv-build` 隔离环境 → `pip install -r requirements.txt` + PyInstaller → 按 `TaskMaster.spec` 打 `.app` → 额外打一份 `notify` 二进制并放进 `.app/Contents/MacOS/` → ad-hoc 签名 → `create-dmg` 制作拖拽式 DMG。
 
 ### 通过 GitHub Actions 云端打包
 
