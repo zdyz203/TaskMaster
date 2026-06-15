@@ -1,0 +1,29 @@
+{
+  "//": "把这段合并到 ~/.claude/settings.json 的 hooks 里。把 PATH_TO 替换为本项目 notify.py 的绝对路径，例如 D:\\\\work\\\\project\\\\ai\\\\agent\\\\notify.py。所有 hook 都调用同一个 notify.py，事件名从 stdin 的 hook_event_name 读取。",
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "SessionEnd": [
+      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "PreToolUse": [
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "Notification": [
+      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ],
+    "SubagentStop": [
+      { "hooks": [{ "type": "command", "command": "python PATH_TO\\notify.py" }] }
+    ]
+  }
+}

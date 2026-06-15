@@ -1,0 +1,29 @@
+{
+  "//": "macOS 用户:把这段合并到 ~/.claude/settings.json 的 hooks 里。安装 .dmg 后 notify.py 位于 /Applications/TaskMaster.app/Contents/Resources/notify.py;若把 notify.py 拷到了其他路径,请相应替换。所有 hook 都调用同一个 notify.py,事件名从 stdin 的 hook_event_name 自动读取。",
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "SessionEnd": [
+      { "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "PreToolUse": [
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "PostToolUse": [
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "Notification": [
+      { "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ],
+    "SubagentStop": [
+      { "hooks": [{ "type": "command", "command": "python3 /Applications/TaskMaster.app/Contents/Resources/notify.py" }] }
+    ]
+  }
+}
