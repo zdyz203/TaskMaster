@@ -1,29 +1,29 @@
 {
-  "//": "macOS 用户:把这段合并到 ~/.claude/settings.json 的 hooks 里。.dmg 安装后 notify 二进制位于 /Applications/TaskMaster.app/Contents/MacOS/notify(已捆绑独立 Python 解释器,不依赖系统 python3)。所有 hook 都调用同一个 notify,事件名从 stdin 的 hook_event_name 自动读取。",
+  "//": "macOS 用户:把这段合并到 ~/.claude/settings.json 的 hooks 里。.dmg 安装后 notify 二进制位于 /Applications/TaskMaster.app/Contents/MacOS/notify(已捆绑独立 Python 解释器,不依赖系统 python3)。所有 hook 都调用同一个 notify,事件名从 stdin 的 hook_event_name 自动读取。command 用双引号包起来,以防被拷到含空格的路径。",
   "hooks": {
     "SessionStart": [
-      { "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "SessionEnd": [
-      { "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "UserPromptSubmit": [
-      { "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "PreToolUse": [
-      { "matcher": ".*", "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "PostToolUse": [
-      { "matcher": ".*", "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "matcher": ".*", "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "Notification": [
-      { "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "Stop": [
-      { "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ],
     "SubagentStop": [
-      { "hooks": [{ "type": "command", "command": "/Applications/TaskMaster.app/Contents/MacOS/notify" }] }
+      { "hooks": [{ "type": "command", "command": "\"/Applications/TaskMaster.app/Contents/MacOS/notify\"" }] }
     ]
   }
 }

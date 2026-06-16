@@ -49,6 +49,8 @@ python main.py
 
 所有 hook 都调用同一个 `notify.exe`,事件名和 `session_id` 从 stdin 的 hook payload 自动读取,浮窗主程序按 session 路由。
 
+> **路径含空格**(如默认全局安装路径 `C:\Program Files\TaskMaster`):command 字符串必须用双引号包起来,JSON 里写成 `"\"C:\\Program Files\\TaskMaster\\notify.exe\""`。模板里默认已经带好引号,直接整段替换 `PATH_TO` 即可。
+
 ### macOS
 
 参考 `hooks.example.macos.json`,合并到 `~/.claude/settings.json`。`.dmg` 安装后 `notify` 位于 `/Applications/TaskMaster.app/Contents/MacOS/notify`,模板里已经填好这个路径。
@@ -160,3 +162,23 @@ python notify.py --event SessionEnd   --session demo
 - `installer.iss` — Inno Setup 安装包脚本（Windows）
 - `.github/workflows/build-mac.yml` — GitHub Actions macOS 云端打包
 - `.github/workflows/build-win.yml` — GitHub Actions Windows 云端打包
+
+
+## claude hooks说明
+- 打开claude       sessionstart            打开浮窗，默认空闲中
+- 输入后 回车      userpromptsubmit        工作中
+- 工具调用前   pretooluse					工作中
+- 工具调用后   posttooluse				工作中
+- 任务停止或给出建议 需要回复  stop             空闲中
+- 任务停止或给出建议 需要回复  subagentstop     空闲中
+- 给出选项需要确认   notification           如果上一步不是stop且不是subagentstop  待确认
+- 给出建议提交      userpromptsubmit
+- 停止一段时间后，空闲提醒      notification 如果上一步是stop或者subagentstop 则是空闲提醒，不需要处理
+- 退出claude       sessionend           对应关闭浮窗
+
+ 几个容易混淆的点：
+
+  - Stop vs SessionEnd：Stop 每个回合都触发（这条回复结束 → 触发 → 你再发消息 → 我回复 → 再触发），SessionEnd 整个会话只触发一次。
+  - SessionStart 的 compact 子类型：上下文压缩之后会重新走一遍 SessionStart 而不是 SessionEnd。
+  - PreToolUse 可以拒绝工具调用（hook 返回非零 + stderr 决定）；PostToolUse 只能观察不能撤回。
+  - UserPromptSubmit 也能拒绝你的 prompt（直接吞掉不让我看到）。
